@@ -689,7 +689,7 @@ variable "cert_manager_kubernetes_svc_image_pull_secrets" {
 variable "enable_argo_rollouts" {
   description = "Enable Argo Rollouts add-on"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "argo_rollouts_helm_config" {
@@ -714,13 +714,35 @@ variable "argocd_helm_config" {
 variable "argocd_applications" {
   description = "Argo CD Applications config to bootstrap the cluster"
   type        = any
-  default     = {}
+  default     = {
+    addons = {
+    path                = "chart"
+    repo_url            = "git@github.com:pingsecurity/EKS_Research.git"
+    add_on_application  = true # Andrew Added Section: Indicates the root add-on application.
+    project             = "default"
+    add_on_application  = true              # Indicates the root add-on application.
+    ssh_key_secret_name = "PingSecurityGitPrivateKey"  # Needed for private repos 
+  }
+  }
 }
 
 variable "argocd_manage_add_ons" {
   description = "Enable managing add-on configuration via ArgoCD App of Apps"
   type        = bool
   default     = false
+}
+
+#-----------ARGO EVENTS ADDON-------------------
+variable "enable_argo_events" {
+  description = "Enable Argo Events add-on"
+  type        = bool
+  default     = true
+}
+
+variable "argo_rollouts_helm_config" {
+  description = "Argo Rollouts Helm Chart config"
+  type        = any
+  default     = null
 }
 
 #-----------AWS NODE TERMINATION HANDLER-------------
