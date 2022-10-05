@@ -9,6 +9,6 @@ resource "aws_kms_key" "this" {
 
 # Assign an alias to the key
 resource "aws_kms_alias" "this" {
-  name          = var.alias
+  name          = "${var.alias}"
   target_key_id = aws_kms_key.this.key_id
 }

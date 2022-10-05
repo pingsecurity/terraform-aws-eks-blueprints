@@ -1,0 +1,24 @@
+[0m[1mInitializing modules...[0m
+
+[0m[1mInitializing the backend...[0m
+
+[0m[1mInitializing provider plugins...[0m
+- Finding hashicorp/kubernetes versions matching ">= 2.10.0"...
+- Finding hashicorp/helm versions matching ">= 2.4.1"...
+- Finding gavinbunney/kubectl versions matching ">= 1.14.0"...
+- Finding hashicorp/time versions matching ">= 0.7.0"...
+- Finding hashicorp/aws versions matching ">= 3.72.0, >= 4.10.0"...
+- Installing hashicorp/kubernetes v2.13.1...
+[33m[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mExperimental feature "module_variable_optional_attrs" is active[0m
+[33m│[0m [0m
+[33m│[0m [0m[0m  on helm-addon/versions.tf line 4, in terraform:
+[33m│[0m [0m   4:   experiments = [[4mmodule_variable_optional_attrs[0m][0m
+[33m│[0m [0m
+[33m│[0m [0mExperimental features are subject to breaking changes in future minor or patch releases, based on feedback.
+[33m│[0m [0m
+[33m│[0m [0mIf you have feedback on the design of this feature, please open a GitHub issue to discuss it.
+[33m│[0m [0m
+[33m│[0m [0m(and 103 more similar warnings elsewhere)
+[33m╵[0m[0m
+[0m[0m

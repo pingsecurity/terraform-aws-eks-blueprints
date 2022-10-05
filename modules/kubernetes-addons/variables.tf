@@ -739,8 +739,8 @@ variable "enable_argo_events" {
   default     = true
 }
 
-variable "argo_rollouts_helm_config" {
-  description = "Argo Rollouts Helm Chart config"
+variable "argo_events_helm_config" {
+  description = "Argo Events Helm Chart config"
   type        = any
   default     = null
 }

@@ -62,22 +62,6 @@ module "aws_ebs_csi_driver" {
 
 #-----------------Kubernetes Add-ons----------------------
 
-module "agones" {
-  count                        = var.enable_agones ? 1 : 0
-  source                       = "./agones"
-  helm_config                  = var.agones_helm_config
-  eks_worker_security_group_id = var.eks_worker_security_group_id
-  manage_via_gitops            = var.argocd_manage_add_ons
-  addon_context                = local.addon_context
-}
-
-module "airflow" {
-  count         = var.enable_airflow ? 1 : 0
-  source        = "./airflow"
-  helm_config   = var.airflow_helm_config
-  addon_context = local.addon_context
-}
-
 module "argocd" {
   count         = var.enable_argocd ? 1 : 0
   source        = "./argocd"
@@ -95,20 +79,10 @@ module "argo_rollouts" {
   addon_context     = local.addon_context
 }
 
-module "aws_efs_csi_driver" {
-  count             = var.enable_aws_efs_csi_driver ? 1 : 0
-  source            = "./aws-efs-csi-driver"
-  helm_config       = var.aws_efs_csi_driver_helm_config
-  irsa_policies     = var.aws_efs_csi_driver_irsa_policies
-  manage_via_gitops = var.argocd_manage_add_ons
-  addon_context     = local.addon_context
-}
-
-module "aws_fsx_csi_driver" {
-  count             = var.enable_aws_fsx_csi_driver ? 1 : 0
-  source            = "./aws-fsx-csi-driver"
-  helm_config       = var.aws_fsx_csi_driver_helm_config
-  irsa_policies     = var.aws_fsx_csi_driver_irsa_policies
+module "argo_events" {
+  count             = var.enable_argo_events ? 1 : 0
+  source            = "./argo-events"
+  helm_config       = var.argo_events_helm_config
   manage_via_gitops = var.argocd_manage_add_ons
   addon_context     = local.addon_context
 }
@@ -218,12 +192,6 @@ module "external_dns" {
   route53_zone_arns = var.external_dns_route53_zone_arns
 }
 
-module "fargate_fluentbit" {
-  count         = var.enable_fargate_fluentbit ? 1 : 0
-  source        = "./fargate-fluentbit"
-  addon_config  = var.fargate_fluentbit_addon_config
-  addon_context = local.addon_context
-}
 
 module "grafana" {
   count             = var.enable_grafana ? 1 : 0
@@ -433,79 +401,13 @@ module "opentelemetry_operator" {
   count = var.enable_amazon_eks_adot || var.enable_opentelemetry_operator ? 1 : 0
 
   # Amazon EKS ADOT addon
-  enable_amazon_eks_adot = var.enable_amazon_eks_adot
-  addon_config = merge(
-    {
-      kubernetes_version = var.eks_cluster_version
-    },
-    var.amazon_eks_adot_config,
-  )
+
 
   # Self-managed OpenTelemetry Operator via Helm chart
   enable_opentelemetry_operator = var.enable_opentelemetry_operator
   helm_config                   = var.opentelemetry_operator_helm_config
 
   addon_context = local.addon_context
-}
-
-module "adot_collector_java" {
-  count  = var.enable_adot_collector_java ? 1 : 0
-  source = "./adot-collector-java"
-
-  helm_config   = var.adot_collector_java_helm_config
-  addon_context = local.addon_context
-
-  amazon_prometheus_workspace_endpoint = var.amazon_prometheus_workspace_endpoint
-  amazon_prometheus_workspace_region   = var.amazon_prometheus_workspace_region
-
-  depends_on = [
-    module.opentelemetry_operator
-  ]
-}
-
-module "adot_collector_haproxy" {
-  count  = var.enable_adot_collector_haproxy ? 1 : 0
-  source = "./adot-collector-haproxy"
-
-  helm_config   = var.adot_collector_haproxy_helm_config
-  addon_context = local.addon_context
-
-  amazon_prometheus_workspace_endpoint = var.amazon_prometheus_workspace_endpoint
-  amazon_prometheus_workspace_region   = var.amazon_prometheus_workspace_region
-
-  depends_on = [
-    module.opentelemetry_operator
-  ]
-}
-
-module "adot_collector_memcached" {
-  count  = var.enable_adot_collector_memcached ? 1 : 0
-  source = "./adot-collector-memcached"
-
-  helm_config   = var.adot_collector_memcached_helm_config
-  addon_context = local.addon_context
-
-  amazon_prometheus_workspace_endpoint = var.amazon_prometheus_workspace_endpoint
-  amazon_prometheus_workspace_region   = var.amazon_prometheus_workspace_region
-
-  depends_on = [
-    module.opentelemetry_operator
-  ]
-}
-
-module "adot_collector_nginx" {
-  count  = var.enable_adot_collector_nginx ? 1 : 0
-  source = "./adot-collector-nginx"
-
-  helm_config   = var.adot_collector_nginx_helm_config
-  addon_context = local.addon_context
-
-  amazon_prometheus_workspace_endpoint = var.amazon_prometheus_workspace_endpoint
-  amazon_prometheus_workspace_region   = var.amazon_prometheus_workspace_region
-
-  depends_on = [
-    module.opentelemetry_operator
-  ]
 }
 
 module "kuberay_operator" {
